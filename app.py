@@ -97,20 +97,37 @@ class RootCollection(DAVCollection):
         super().__init__("/", environ)
         self.flatten_structure = flatten_structure
         
+    def _sanitize_name(self, name):
+        """Replace illegal filesystem characters to prevent WebDAV crashes."""
+        if not name:
+            return "Untitled Album"
+        # Replace forward slashes (and backslashes just to be safe) with underscores
+        return name.replace("/", "_").replace("\\", "_")
+
     def _get_album(self, name):
         for album in self.provider.all_album_data:
-            if album.get("albumName") == name:
+            if self._sanitize_name(album.get("albumName")) == name:
                 return album
+        return None
 
     def get_member_names(self):
-        return [entry['albumName'] for entry in self.provider.all_album_data]
+        # Present the sanitized names to the WebDAV client
+        return [self._sanitize_name(entry.get('albumName')) for entry in self.provider.all_album_data]
 
     def get_member(self, name):
-        return ImmichAlbumCollection(join_uri(self.path, name), self.environ,
-                                     next((entry for entry in self.provider.all_album_data 
-                                           if entry['albumName'] == name), None), 
-                                     self.flatten_structure)
-
+        # Match the WebDAV requested name (which is sanitized) against our sanitized album list
+        album = next((entry for entry in self.provider.all_album_data 
+                      if self._sanitize_name(entry.get('albumName')) == name), None)
+        
+        if not album:
+            return None
+            
+        return ImmichAlbumCollection(
+            join_uri(self.path, name), 
+            self.environ,
+            album,
+            self.flatten_structure
+        )
 
 class ImmichAlbumCollection(DAVCollection):
     def __init__(self, path: str, environ: dict, album: dict, flatten_structure: bool):
