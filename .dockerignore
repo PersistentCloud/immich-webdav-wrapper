@@ -1,23 +1,30 @@
-# Ignore all files and directories except those needed
-.*
+.git/
+.github/
+.idea/
+.vscode/
 
-# Ignore Python cache and compiled files
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
+.env
+.env.*
+!.env.example
 
-# Ignore virtual environments
+.venv/
 venv/
-env/
 
-# Ignore development and test files
-build.sh
-*.md
+__pycache__/
+*.py[cod]
+
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+build/
+dist/
+*.egg-info/
+
 tests/
 docs/
 
-# Ignore any other unnecessary files
-.dockerignore
-Dockerfile
+build.sh
 docker-compose*.yaml

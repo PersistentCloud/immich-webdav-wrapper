@@ -1,17 +1,18 @@
-# Use the official Python image from Docker Hub
-FROM python:3.11-slim
+# syntax=docker/dockerfile:1
 
-# Set the working directory in the container
+FROM python:3.11-slim-bookworm
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1
+
 WORKDIR /app
 
-# Copy the requirements file to the container
-COPY requirements.txt .
+COPY pyproject.toml README.md LICENSE ./
+COPY src/ ./src/
 
-# Install dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir .
 
-# Copy the rest of your application code to the container
-COPY . .
+EXPOSE 1700
 
-# Command to run your application
-CMD ["python", "app.py"]
+CMD ["immich-webdav"]

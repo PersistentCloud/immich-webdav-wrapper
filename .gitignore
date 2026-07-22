@@ -1,10 +1,29 @@
-venv/
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
+# Environment and secrets
 .env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+.env.*
+!.env.example
+
+# Virtual environments
+.venv/
+venv/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyd
+
+# Testing and analysis
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# Packaging
+build/
+dist/
+*.egg-info/
+
+# IDEs
+.idea/
+.vscode/
