@@ -1,19 +1,9 @@
+name: immich-webdav-wrapper-build
+
 services:
   immich-webdav-wrapper:
-    container_name: immich_webdav_wrapper
-    image: persistentcloud/immich-webdav-wrapper
-    platform: linux/amd64
+    image: persistentcloud/immich-webdav-wrapper:local
+
     build:
       context: .
       dockerfile: Dockerfile
-#    environment:
-#      IMMICH_URL: http://immich_server:2283
-#      IMMICH_API_KEY: ${IMMICH_API_KEY}
-#      ALBUM_IDS: ${ALBUM_IDS}
-#      REFRESH_RATE_HOURS: ${REFRESH_RATE_HOURS}
-#      EXCLUDED_FILE_TYPES: ${EXCLUDED_FILE_TYPES}
-    ports:
-      - 1700:1700
-    volumes:
-      - /path/to/your/images:/upload  # Replace with your actual path
-    restart: unless-stopped
